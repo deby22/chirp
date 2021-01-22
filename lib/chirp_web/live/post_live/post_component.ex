@@ -41,4 +41,15 @@ defmodule ChirpWeb.PostLive.PostComponent do
       </div>
     """
   end
+
+  def handle_event("like", _, socket) do
+    Chirp.TimeLine.inc_likes(socket.assigns.post)
+    {:noreply, socket}
+  end
+
+  def handle_event("repost", _, socket) do
+    Chirp.TimeLine.inc_reposts(socket.assigns.post)
+    {:noreply, socket}
+  end
+
 end
