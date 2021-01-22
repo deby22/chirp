@@ -8,7 +8,7 @@ defmodule ChirpWeb.PostLive.Index do
   def mount(_params, _session, socket) do
     if connected?(socket), do: TimeLine.subscibe()
 
-    {:ok, assign(socket, :posts, list_posts())}
+    {:ok, assign(socket, :posts, fetch_posts()), temporary_assigns: [posts: []]}
   end
 
   @impl true
@@ -47,7 +47,16 @@ defmodule ChirpWeb.PostLive.Index do
     {:noreply, update(socket, :posts, fn posts -> [post | posts] end)}
   end
 
+  def handle_info({:post_updated, post}, socket) do
+    {:noreply, update(socket, :posts, fn posts -> [post | posts] end)}
+  end
+
+
   defp list_posts do
+    TimeLine.list_posts()
+  end
+
+  defp fetch_posts do
     TimeLine.list_posts()
   end
 end
